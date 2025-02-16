@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Proyecto ingenieria en software"] = "Home Page";
+}
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AddAsset</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Fondo azul con degradado */
+        body {
+            background: linear-gradient(135deg, #0056b3, #003366);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .texto-blanco-negrita {
+            color: white; /* Texto en blanco */
+            font-weight: bold; /* Negrita */
+        }
+    </style>
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+    <div class="container bg-white p-5 rounded shadow-lg";">
+        <h2 class="text-center mb-4">Agregar Activo</h2>
+        <form action="#" method="POST">
+            <label for="name">ID Activo:</label>><br>
+            <input type="number" id="idActivo" name="idActivo" required><br><br>
+
+            <label for="value">Nombre:</label>><br>
+            <input type="text" id="nombre" name="nombre" required><br><br>
+            
+            <label for="name">Descripcion:</label>><br>
+            <input type="text" id="descripcion" name="descripcion" required><br><br>
+
+            <label for="value">Estado:</label>><br>
+            <input type="text" id="estado" name="estado" required><br><br>
+            
+            <label for="value">Fecha Adquisicion:</label>><br>
+            <input type="text" id="fechaAdquisicion" name="fechaAdquisicion" required><br><br>><br>
+            
+            <button type="submit" class="btn btn-success w-100">Agregar</button>
+        </form>
+    </div>
+    <div class="container text-center mt-5">
+        <a asp-controller="Login" asp-action="Dashboard" class="btn btn-danger mt-3">Volver</a>
+        
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
