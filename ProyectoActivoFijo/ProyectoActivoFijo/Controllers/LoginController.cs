@@ -1,24 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
 using ProyectoActivoFijo.Models;
+using Firebase.Auth;
+using Microsoft.AspNetCore.Mvc; 
 
 namespace ProyectoActivoFijo.Controllers
 {
     public class LoginController : Controller
-    {
+    { 
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Authenticate(User user)
+        async public Task<IActionResult> Authenticate(Models.User user)
         {
-            // Aquí puedes agregar lógica de autenticación con una base de datos
-            if (user.Username == "admin" && user.Password == "1234")
+            FireBaseController fbc = new FireBaseController();
+
+            try
             {
+                UserCredential userCreadential = await fbc.SignInWithEmailAndPassowrd(user.Username, user.Password);
+
+                if (userCreadential == null)
+                {
+                    ViewBag.Error = "Usuario o contraseña incorrectos";
+                    return View("Index");
+                }
+
+                Models.User userLogged = new Models.User();
+                
+                userLogged.UID= userCreadential.User.Uid;
+                userLogged.Username = user.Username;
+
+                // Falta setear datos en session
+                //HttpContext.Session.Set("user_logged", Encoding.UTF8.GetBytes(userLogged.ToString()));
                 return RedirectToAction("Dashboard");
+            } catch (Exception ex) {
+                ViewBag.Error = ex.Message;
             }
-            ViewBag.Error = "Usuario o contraseña incorrectos";
+
             return View("Index");
         }
 
@@ -26,5 +46,6 @@ namespace ProyectoActivoFijo.Controllers
         {
             return View("Dashboard");
         }
+
     }
 }
