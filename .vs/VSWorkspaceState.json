@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.github",
+    "\\ProyectoActivoFijo",
+    "\\ProyectoActivoFijo\\ProyectoActivoFijo",
+    "\\ProyectoActivoFijo\\ProyectoActivoFijo\\Models",
+    "\\ProyectoActivoFijo\\ProyectoActivoFijo\\Properties",
+    "\\ProyectoActivoFijo\\ProyectoActivoFijo\\Views"
   ],
-  "SelectedNode": "\\ProyectoActivoFijo.sln",
+  "SelectedNode": "\\ProyectoActivoFijo\\ProyectoActivoFijo.sln",
   "PreviewInSolutionExplorer": false
 }
