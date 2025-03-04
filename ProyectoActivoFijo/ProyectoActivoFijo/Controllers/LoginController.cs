@@ -29,12 +29,13 @@ namespace ProyectoActivoFijo.Controllers
 
                 Models.User userLogged = new Models.User();
                 
-                userLogged.UID= userCreadential.User.Uid;
+                userLogged.UID = userCreadential.User.Uid;
                 userLogged.Username = user.Username;
 
                 // Falta setear datos en session
+                // HttpContext.Session.SetString("userSession", JsonConvert.SerializeObject(user));
                 //HttpContext.Session.Set("user_logged", Encoding.UTF8.GetBytes(userLogged.ToString()));
-                return RedirectToAction("Dashboard");
+                return Redirect("/Asset");
             } catch (Exception ex) {
                 ViewBag.Error = ex.Message;
             }

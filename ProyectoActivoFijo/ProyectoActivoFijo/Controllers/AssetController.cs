@@ -1,17 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoActivoFijo.Models;
 
 namespace ProyectoActivoFijo.Controllers
 {
     public class AssetController : Controller
     {
         // GET: AssetController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            FireBaseController fbc = new FireBaseController();
+            List<Asset> listAssets = await fbc.GetDataAsync<Asset>("activos");
+            return View(listAssets);
         }
 
-        public IActionResult addAsset()
+        public IActionResult Add()
         {
             return View();
         }

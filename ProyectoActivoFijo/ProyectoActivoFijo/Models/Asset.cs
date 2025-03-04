@@ -1,12 +1,26 @@
-﻿namespace ProyectoActivoFijo.Models
+﻿using Google.Cloud.Firestore;
+using Newtonsoft.Json;
+
+namespace ProyectoActivoFijo.Models
 {
-    public class Activos
+    public class Asset
     {
-        public int ID { get; set; } 
-        public string nombre { get; set; }  
-        public string descripcion { get; set; }
-        public string ubicacion { get; set; }
-        public string estado { get; set; }
-        public string fechaAdquisicion { get; set; }
+        [JsonProperty("id")]
+        public string ID { get; set; }
+
+        [JsonProperty("nombre")]
+        public string Nombre { get; set; }
+
+        [JsonProperty("descripcion")]
+        public string Descripcion { get; set; }
+
+        [JsonProperty("ubicacion")] 
+        public string Ubicacion { get; set; }
+
+        [JsonProperty("estado")] 
+        public string Estado { get; set; }
+
+        [JsonProperty("fecha_adquisicion")]
+        public DateTime FechaAdquisicion { get; set; }
     }
 }
