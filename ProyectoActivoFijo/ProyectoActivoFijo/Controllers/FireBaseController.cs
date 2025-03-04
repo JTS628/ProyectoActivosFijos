@@ -2,8 +2,8 @@
 using Firebase.Auth; 
 using Newtonsoft.Json; 
 using System.Net.Http.Headers;
-using System.Reflection; 
-
+using System.Reflection;
+using System.Text;
 namespace ProyectoActivoFijo.Controllers
 {
 
@@ -75,10 +75,73 @@ namespace ProyectoActivoFijo.Controllers
             return dataList; 
         }
 
+        public async Task<List<T>> GetDataAsync<T>(string collection, Dictionary<string, (string operador, object valor)> filtros) where T : new()
+        {
+            var url = $"{FB_STORE_URL}:runQuery";
+
+            var filtrosLista = new List<object>();
+            foreach (var filtro in filtros)
+            {
+                filtrosLista.Add(new
+                {
+                    fieldFilter = new
+                    {
+                        field = new { fieldPath = filtro.Key },
+                        op = filtro.Value.operador,
+                        value = CrearValorFirestore(filtro.Value.valor)
+                    }
+                });
+            }
+
+            var query = new
+            {
+                structuredQuery = new
+                {
+                    from = new[]
+                    {
+                    new { collectionId = collection }
+                },
+                    where = new
+                    {
+                        compositeFilter = new
+                        {
+                            op = "AND",
+                            filters = filtrosLista
+                        }
+                    }
+                }
+            };
+
+            var json = JsonConvert.SerializeObject(query);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync(url, content);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Error al obtener datos de {collection}");
+            }
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            List<T> dataList = DeserializarFirestoreResponseFilter<T>(responseBody);
+            return dataList;
+        }
+
+        private object CrearValorFirestore(object valor)
+        {
+            return valor switch
+            {
+                int i => new { integerValue = i },
+                double d => new { doubleValue = d },
+                bool b => new { booleanValue = b },
+                string s => new { stringValue = s },
+                DateTime dt => new { timestampValue = dt.ToString("yyyy-MM-ddTHH:mm:ssZ") },
+                _ => throw new ArgumentException("Tipo de dato no soportado.")
+            };
+        }
 
         public List<T> DeserializarFirestoreResponse<T>(string json) where T : new()
 
-        {
+        { 
             var firestoreResponse = JsonConvert.DeserializeObject<FirestoreResponse<T>>(json);
 
             List<T> data = new List<T>();
@@ -142,6 +205,74 @@ namespace ProyectoActivoFijo.Controllers
             return data;
         }
 
+        public List<T> DeserializarFirestoreResponseFilter<T>(string json) where T : new()
+
+        {
+            var firestoreResponse = JsonConvert.DeserializeObject<List<FirestoreResponseFilters<T>>>(json);
+
+            List<T> data = new List<T>();
+
+            Dictionary<string, string> dicctionaryJsonProperty = GetDicctionaryJsonPropertyFromType(typeof(T));
+
+            foreach (var regFirestoreResponse in firestoreResponse)
+            {
+                var doc = regFirestoreResponse.Document;
+
+                T itemData = new T();
+                Type typeT = itemData.GetType();
+                PropertyInfo[] propertiesOfType = typeT.GetProperties();
+
+                Dictionary<string, FirestoreValue> jsonDocFields = doc.Fields;
+
+                foreach (var field in doc.Fields)
+                {
+                    string keyJsonDocument = field.Key;
+                    var valueJsonDocument = field.Value;
+
+                    // Busca en el diccionario JsonProperty
+
+                    string keyFromDicctionary;
+                    if (!dicctionaryJsonProperty.TryGetValue(keyJsonDocument, out string _))
+                    {
+                        continue;
+                    }
+
+                    keyFromDicctionary = dicctionaryJsonProperty[keyJsonDocument];
+                    if (keyFromDicctionary == null)
+                    {
+                        continue;
+                    }
+
+                    // Se valida que exista en el modelo
+                    PropertyInfo _propertyInfo = typeT.GetProperty(keyFromDicctionary);
+                    if (_propertyInfo == null)
+                    {
+                        continue;
+                    }
+
+                    // Detecta y muestra el tipo de dato
+                    if (valueJsonDocument.StringValue != null)
+                        _propertyInfo.SetValue(itemData, valueJsonDocument.StringValue);
+                    else if (valueJsonDocument.ReferenceValue != null)
+                        _propertyInfo.SetValue(itemData, valueJsonDocument.ReferenceValue);
+                    else if (valueJsonDocument.TimestampValue != null)
+                        _propertyInfo.SetValue(itemData, DateTime.Parse(valueJsonDocument.TimestampValue, null, System.Globalization.DateTimeStyles.AssumeUniversal));
+                    else if (valueJsonDocument.IntegerValue != null)
+                        _propertyInfo.SetValue(itemData, valueJsonDocument.IntegerValue);
+                    else if (valueJsonDocument.DoubleValue != null)
+                        _propertyInfo.SetValue(itemData, valueJsonDocument.DoubleValue);
+                    else if (valueJsonDocument.BooleanValue != null)
+                        _propertyInfo.SetValue(itemData, valueJsonDocument.BooleanValue);
+                    else
+                        throw new Exception($"No se encontro el tipo! {keyJsonDocument}-{keyFromDicctionary}");
+                    //else if (valueJsonDocument.ArrayValue != null)
+
+                }
+                data.Add(itemData);
+            }
+            return data;
+        }
+
         public Dictionary<string, string> GetDicctionaryJsonPropertyFromType(Type tipo)
         {
             Dictionary<string, string> diccionario = new Dictionary<string, string>();
@@ -175,6 +306,12 @@ public class FirestoreResponse<T>
 {
     [JsonProperty("documents")]
     public List<Document> Documents { get; set; }
+}
+
+public class FirestoreResponseFilters<T>
+{
+    [JsonProperty("document")]
+    public Document Document { get; set; }
 }
 
 public class Document

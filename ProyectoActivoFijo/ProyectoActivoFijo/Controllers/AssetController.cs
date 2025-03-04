@@ -6,10 +6,11 @@ namespace ProyectoActivoFijo.Controllers
 {
     public class AssetController : Controller
     {
+        FireBaseController fbc = new FireBaseController();
+
         // GET: AssetController
         public async Task<ActionResult> Index()
         {
-            FireBaseController fbc = new FireBaseController();
             List<Asset> listAssets = await fbc.GetDataAsync<Asset>("activos");
             return View(listAssets);
         }
@@ -17,6 +18,26 @@ namespace ProyectoActivoFijo.Controllers
         public IActionResult Add()
         {
             return View();
+        }
+
+        // GET: AssetController/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            var filtros = new Dictionary<string, (string, object)>
+            { 
+                { "id", ("EQUAL", id) },
+            };
+
+            Asset asset = new Asset();
+            List<Asset> listAssets = await fbc.GetDataAsync<Asset>("activos", filtros);
+
+            if (listAssets.Count != 1)
+            {
+                return NotFound();
+            }
+
+            return View(listAssets.FirstOrDefault());
+            
         }
 
         // GET: AssetController/Details/5
@@ -45,12 +66,7 @@ namespace ProyectoActivoFijo.Controllers
                 return View();
             }
         }
-
-        // GET: AssetController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+         
 
         // POST: AssetController/Edit/5
         [HttpPost]
