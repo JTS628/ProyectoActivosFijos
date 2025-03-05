@@ -1,4 +1,5 @@
-﻿using Google.Cloud.Firestore;
+﻿using System.ComponentModel.DataAnnotations;
+using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
 namespace ProyectoActivoFijo.Models
@@ -20,6 +21,7 @@ namespace ProyectoActivoFijo.Models
         [JsonProperty("estado")] 
         public string Estado { get; set; }
 
+        [Display(Name = "Fecha Adquisición")]
         [JsonProperty("fecha_adquisicion")]
         public DateTime FechaAdquisicion { get; set; }
     }

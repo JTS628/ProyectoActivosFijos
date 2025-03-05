@@ -1,13 +1,14 @@
 ﻿@model ProyectoActivoFijo.Models.Asset
 
 @{
-    ViewData["Title"] = "Registrando Activo";
+    ViewData["Title"] = "Editando Activo";
 }
 
 <div class="bg-light d-flex justify-content-center align-items-center vh-100">
     <div class="container bg-white p-5 rounded shadow-lg;"> 
         <h2 class="text-center mb-4">@ViewData["Title"]</h2>
-        <form action="#" method="POST">
+        <form action="Update" method="POST">
+            @Html.AntiForgeryToken()
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
@@ -45,7 +46,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             @Html.LabelFor(model => model.FechaAdquisicion, new { @class = "" })
-                            @Html.TextBoxFor(model => model.FechaAdquisicion, new { @class = "form-control", @type = "date" })
+                            <input class="form-control" id="FechaAdquisicion" name="FechaAdquisicion" type="datetime-local" value="@Model.FechaAdquisicion.ToString("yyyy-MM-ddTHH:mm")">
                             @Html.ValidationMessageFor(model => model.FechaAdquisicion, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -62,7 +63,7 @@
 
                 <div class="row mt-2">
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-success">Agregar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
                         @Html.ActionLink("Cancelar", "Index", new { code = "" }, new { @class = "btn btn-danger" })
                     </div>
                 </div>

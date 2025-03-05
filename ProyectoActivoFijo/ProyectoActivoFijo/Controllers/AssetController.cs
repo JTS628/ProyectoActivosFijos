@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+ 
 using ProyectoActivoFijo.Models;
 
 namespace ProyectoActivoFijo.Controllers
@@ -46,8 +46,10 @@ namespace ProyectoActivoFijo.Controllers
             return View();
         }
 
-        // GET: AssetController/Create
-        public ActionResult Create()
+        // GET: AssetController/Add
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind( "ID, Nombre, Descripcion, Ubicacion, Estado, FechaAdquisicion")] Asset asset)
         {
             return View();
         }

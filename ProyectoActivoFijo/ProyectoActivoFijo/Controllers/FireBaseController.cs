@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Net.Http;
 namespace ProyectoActivoFijo.Controllers
 {
 
@@ -124,6 +125,28 @@ namespace ProyectoActivoFijo.Controllers
 
             List<T> dataList = DeserializarFirestoreResponseFilter<T>(responseBody);
             return dataList;
+        }
+
+
+        public async Task CreateDocument(string collection, Dictionary<string, object> datos)
+        {
+            var url = $"{FB_STORE_URL}/{collection}";
+
+            var campos = new Dictionary<string, object>();
+            foreach (var dato in datos)
+            {
+                campos[dato.Key] = CrearValorFirestore(dato.Value);
+            }
+
+            var json = JsonConvert.SerializeObject(new { fields = campos });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync(url, content);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine(response.IsSuccessStatusCode
+                ? "Documento creado correctamente."
+                : $"Error: {responseBody}");
         }
 
         private object CrearValorFirestore(object valor)

@@ -7,7 +7,7 @@
 <div class="bg-light d-flex justify-content-center align-items-center vh-100">
     <div class="container bg-white p-5 rounded shadow-lg;"> 
         <h2 class="text-center mb-4">@ViewData["Title"]</h2>
-        <form action="#" method="POST">
+        <form action="Create" method="POST">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
@@ -45,7 +45,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             @Html.LabelFor(model => model.FechaAdquisicion, new { @class = "" })
-                            @Html.TextBoxFor(model => model.FechaAdquisicion, new { @class = "form-control", @type = "date" })
+                            @Html.TextBoxFor(model => model.FechaAdquisicion, new { @class = "form-control", @type = "datetime-local", @value = Model.FechaAdquisicion.ToString("yyyy-MM-ddTHH:mm:ss") })
                             @Html.ValidationMessageFor(model => model.FechaAdquisicion, "", new { @class = "text-danger" })
                         </div>
                     </div>
