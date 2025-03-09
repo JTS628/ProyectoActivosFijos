@@ -54,6 +54,27 @@ namespace ProyectoActivoFijo.Controllers
             return View();
         }
 
+        public ActionResult CreateAsset(string txtId, string txtNombre, string txtEstado, string txtUbicacion, string txtDescripcion, DateTime txtFechadquisicion )
+        {
+            AssetHelper assetHelper = new AssetHelper(); 
+
+            bool result = assetHelper.saveAsset(new Asset
+            {
+                ID = txtId,
+                Nombre = txtNombre,
+                Estado = txtEstado,
+                Ubicacion = txtUbicacion,
+                Descripcion = txtDescripcion,
+                FechaAdquisicion = txtFechadquisicion,
+
+
+            }).Result;
+
+            return RedirectToAction("Index");
+
+        }
+
+
         // POST: AssetController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Google.Cloud.Firestore;
+using ProyectoActivoFijo.Controllers;
 using Newtonsoft.Json;
 
 namespace ProyectoActivoFijo.Models
@@ -25,4 +26,37 @@ namespace ProyectoActivoFijo.Models
         [JsonProperty("fecha_adquisicion")]
         public DateTime FechaAdquisicion { get; set; }
     }
+
+    public class AssetHelper
+
+    {
+
+        public async Task<bool> saveAsset(Asset asset)
+        {
+            try
+            {             
+
+                FirestoreDb db = FirestoreDb.Create("dotnet-activos-fijos");
+                DocumentReference docRef = await db.Collection("activos").AddAsync(
+                    new Dictionary<string, object>
+                    {
+                        //esto es un objeto json, por eso va entre parentesis
+                        {"Id",asset.ID },
+                        {"Nombre",asset.Nombre },
+                        {"Estado",asset.Estado },
+                        {"Ubicacion",asset.Ubicacion },
+                        {"Fecha",asset.FechaAdquisicion.ToUniversalTime()  },
+                    });
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+    }
+
 }

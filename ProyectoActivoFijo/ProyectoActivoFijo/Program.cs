@@ -1,6 +1,11 @@
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Builder.Extensions;
+using FirebaseAdmin;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -11,6 +16,15 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+string path = Directory.GetCurrentDirectory() + "\\firebase-config.json";
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
+
+var credential = GoogleCredential.FromFile(path);
+FirebaseApp.Create(new AppOptions
+{
+    Credential = credential
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
