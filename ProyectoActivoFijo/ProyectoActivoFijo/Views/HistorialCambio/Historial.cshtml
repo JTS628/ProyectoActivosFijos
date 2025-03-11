@@ -1,0 +1,102 @@
+﻿@model List<ProyectoActivoFijo.Models.HistorialCambio>
+
+
+@{
+    ViewData["Title"] = "Historial de Cambios";
+}
+
+<h1 class="text-center">Historial de Cambios</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Detalles</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cambio in Model)
+            {
+                <tr>
+                    <td>@cambio.Id</td>
+                    <td>@cambio.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>@cambio.UsuarioEmail</td>
+                    <td>@cambio.Accion</td>
+                    <td>@cambio.Detalles</td>
+                    <td>
+                       @*  <a asp-action="Edit" asp-route-id="@cambio.Id" class="btn btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@cambio.Id" class="btn btn-danger">Eliminar</a> *@
+                        @* se puede agregar en caso de que se necesite *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a asp-action="CrearCambio" class="btn btn-primary">Agregar Cambio</a>
+@* Estilos *@
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+    /* Fondo azul con degradado */
+    body {
+        background: linear-gradient(135deg, #0056b3, #003366);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Contenedor del login */
+    .login-container {
+        width: min(100vw, 400px);
+        min-height: 400px; /* Más alto */
+        background: white;
+        padding: 40px; /* Más espacio interno */
+        border-radius: 15px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Inputs con iconos */
+    .form-control {
+    }
+
+    .input-group-text {
+        background: #007bff;
+        color: white;
+        border: none;
+    }
+
+    /* Botón de login */
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #004c99;
+        }
+
+    /* Navbar estilizado */
+    .navbar {
+        background: #004c99;
+    }
+
+    .navbar-brand {
+        font-weight: bold;
+    }
+
+    .texto-blanco-negrita {
+        color: white; /* Texto en blanco */
+        font-weight: bold; /* Negrita */
+    }
+</style>
