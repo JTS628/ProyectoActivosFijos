@@ -33,7 +33,7 @@ namespace ProyectoActivoFijo.Controllers
             var historial = cambios
                 .Select(item => new HistorialCambio
                 {
-                    Id = int.Parse(item.Key), 
+                    ID = item.Object.ID, 
                     Fecha = item.Object.Fecha,
                     UsuarioEmail = item.Object.UsuarioEmail,
                     Accion = item.Object.Accion,
