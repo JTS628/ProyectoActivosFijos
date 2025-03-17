@@ -16,10 +16,10 @@ namespace ProyectoActivoFijo.Models
         [JsonProperty("descripcion")]
         public string Descripcion { get; set; }
 
-        [JsonProperty("ubicacion")] 
+        [JsonProperty("ubicacion")]
         public string Ubicacion { get; set; }
 
-        [JsonProperty("estado")] 
+        [JsonProperty("estado")]
         public string Estado { get; set; }
 
         [Display(Name = "Fecha Adquisición")]
@@ -28,13 +28,12 @@ namespace ProyectoActivoFijo.Models
     }
 
     public class AssetHelper
-
     {
 
         public async Task<bool> saveAsset(Asset asset)
         {
             try
-            {             
+            {
 
                 FirestoreDb db = FirestoreDb.Create("dotnet-activos-fijos");
                 DocumentReference docRef = await db.Collection("activos").AddAsync(
@@ -55,8 +54,36 @@ namespace ProyectoActivoFijo.Models
                 return false;
             }
 
+
+
+
+
+        }
+
+        public async Task<bool> SaveHistorialCambio(HistorialCambio cambio)
+        {
+            try
+            {
+                FirestoreDb db = FirestoreDb.Create("dotnet-activos-fijos");
+                DocumentReference docRef = await db.Collection("HistorialCambios").AddAsync(
+                    new Dictionary<string, object>
+                    {
+                    {"Fecha", cambio.Fecha.ToUniversalTime()},
+                    {"UsuarioEmail", cambio.UsuarioEmail},
+                    {"Accion", cambio.Accion},
+                    {"Detalles", cambio.Detalles}
+                    });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+
+
+
         }
 
     }
-
 }
