@@ -23,7 +23,7 @@ namespace ProyectoActivoFijo.Models
         public string Estado { get; set; }
 
         [Display(Name = "Fecha Adquisición")]
-        [JsonProperty("fecha_adquisicion")]
+        [JsonProperty("Fecha_Adquisicion")]
         public DateTime FechaAdquisicion { get; set; }
     }
 

@@ -1,4 +1,6 @@
-﻿namespace ProyectoActivoFijo.Models
+﻿using Newtonsoft.Json;
+
+namespace ProyectoActivoFijo.Models
 {
     public class HistorialCambio
     {
@@ -12,12 +14,19 @@
 
         //public required string Detalles { get; set; }
 
+        [JsonProperty("Id")]
+        public string Id { get; set; }
 
-
-        public string ID { get; set; }
+        [JsonProperty("Fecha")]
         public DateTime Fecha { get; set; }
+
+        [JsonProperty("UsuarioEmail")]
         public required string UsuarioEmail { get; set; }
+
+        [JsonProperty("Accion")]
         public required string Accion { get; set; }
+
+        [JsonProperty("Detalles")]
         public required string Detalles { get; set; }
     }
 }

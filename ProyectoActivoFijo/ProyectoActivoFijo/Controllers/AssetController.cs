@@ -18,29 +18,30 @@ namespace ProyectoActivoFijo.Controllers
 
         public IActionResult Add()
         {
-            return View();
+            return View(new Models.Asset() { });
         }
 
+
         //Aqui deje el anterior en caso de que no sea el ideal y se pueda restablecer 
-        //// GET: AssetController/Edit/5
-        //public async Task<ActionResult> Edit(int id)
-        //{
-        //    var filtros = new Dictionary<string, (string, object)>
-        //    { 
-        //        { "id", ("EQUAL", id) },
-        //    };
+        // GET: AssetController/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            var filtros = new Dictionary<string, (string, object)>
+            {
+                { "Id", ("EQUAL", id) },
+            };
 
-        //    Asset asset = new Asset();
-        //    List<Asset> listAssets = await fbc.GetDataAsync<Asset>("activos", filtros);
+            Asset asset = new Asset();
+            List<Asset> listAssets = await fbc.GetDataAsync<Asset>("activos", filtros);
 
-        //    if (listAssets.Count != 1)
-        //    {
-        //        return NotFound();
-        //    }
+            if (listAssets.Count != 1)
+            {
+                return NotFound();
+            }
 
-        //    return View(listAssets.FirstOrDefault());
+            return View(listAssets.FirstOrDefault());
 
-        //}
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -170,6 +171,7 @@ namespace ProyectoActivoFijo.Controllers
             }
         }
          
+
 
         // POST: AssetController/Edit/5
         [HttpPost]
