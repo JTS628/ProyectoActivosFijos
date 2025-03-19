@@ -7,19 +7,19 @@ namespace ProyectoActivoFijo.Models
 {
     public class Asset
     {
-        [JsonProperty("id")]
+        [JsonProperty("Id")]
         public string ID { get; set; }
 
-        [JsonProperty("nombre")]
+        [JsonProperty("Nombre")]
         public string Nombre { get; set; }
 
-        [JsonProperty("descripcion")]
+        [JsonProperty("Descripcion")]
         public string Descripcion { get; set; }
 
-        [JsonProperty("ubicacion")]
+        [JsonProperty("Ubicacion")]
         public string Ubicacion { get; set; }
 
-        [JsonProperty("estado")]
+        [JsonProperty("Estado")]
         public string Estado { get; set; }
 
         [Display(Name = "Fecha Adquisición")]
